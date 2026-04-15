@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Number Game</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+            background: linear-gradient(to right, #000000, #1a1a1a);
+            color: white;
+        }
+
+        h1 {
+            color: gold;
+            text-shadow: 0 0 10px gold;
+        }
+
+        #coins {
+            font-size: 24px;
+            color: lightgreen;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        .numbers button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #333;
+            color: white;
+        }
+
+        .numbers button:hover {
+            background: gold;
+            color: black;
+        }
+
+        button[onclick="dailyBonus()"] {
+            background: orange;
+            color: black;
+            font-weight: bold;
+        }
+
+        button[onclick="dailyBonus()"]:hover {
+            background: gold;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🎯 Number Game (Coins)</h1>
+
+<p>Coins: <span id="coins">100</span></p>
+
+<p>Wins: <span id="wins">0</span> | Loss: <span id="loss">0</span></p>
+
+<button onclick="dailyBonus()">🎁 Daily Bonus</button>
+
+<div class="numbers">
+    <script>
+        for(let i=1;i<=10;i++){
+            document.write(`<button onclick="play(${i})">${i}</button>`);
+        }
+    </script>
+</div>
+
+<p id="result"></p>
+
+<script>
+    let coins = localStorage.getItem("coins") ? parseInt(localStorage.getItem("coins")) : 100;
+    let wins = localStorage.getItem("wins") ? parseInt(localStorage.getItem("wins")) : 0;
+    let loss = localStorage.getItem("loss") ? parseInt(localStorage.getItem("loss")) : 0;
+
+    document.getElementById("coins").innerText = coins;
+    document.getElementById("wins").innerText = wins;
+    document.getElementById("loss").innerText = loss;
+
+    function play(number){
+        if(coins < 10){
+            alert("Coins khatam ho gaye!");
+            return;
+        }
+
+        coins -= 10;
+
+        let random = Math.floor(Math.random()*10)+1;
+
+        if(number === random){
+            coins += 90;
+            wins++;
+            localStorage.setItem("wins", wins);
+            document.getElementById("result").innerHTML = "🎉 Jeet gaye! Number tha: " + random;
+        } else {
+            loss++;
+            localStorage.setItem("loss", loss);
+            document.getElementById("result").innerHTML = "❌ Haar gaye! Number tha: " + random;
+        }
+
+        document.getElementById("coins").innerText = coins;
+        document.getElementById("wins").innerText = wins;
+        document.getElementById("loss").innerText = loss;
+
+        localStorage.setItem("coins", coins);
+    }
+
+    function dailyBonus(){
+        let lastBonus = localStorage.getItem("lastBonus");
+        let today = new Date().toDateString();
+
+        if(lastBonus === today){
+            alert("Aaj ka bonus already le liya!");
+            return;
+        }
+
+        coins += 50;
+        document.getElementById("coins").innerText = coins;
+
+        localStorage.setItem("coins", coins);
+        localStorage.setItem("lastBonus", today);
+
+        alert("🎉 50 Coins mil gaye!");
+    }
+</script>
+
+</body>
+</html> 
